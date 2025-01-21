@@ -1,8 +1,6 @@
 """
 >>> find_shortest_path(atlanta, el_paso)
 cheapest_prices_table: {'Atlanta': 0, 'Boston': 100, 'Denver': 160, 'Chicago': 200, 'El Paso': 280}
-cheapest_previous_stopover_city_table: {'Boston': 'Atlanta', 'Denver': 'Atlanta', 'Chicago': 'Denver', 'El Paso': 'Chicago'}
-shortest_path: ['Atlanta', 'Denver', 'Chicago', 'El Paso']
 """
 import heapq
 
@@ -13,6 +11,9 @@ class City:
         
     def add_route(self, city, price):
         self.routes[city] = price
+        
+    def __repr__(self):
+        return self.name
 
 atlanta = City("Atlanta")
 boston = City("Boston")
@@ -30,14 +31,13 @@ denver.add_route(el_paso, 140)
 
 def find_shortest_path(start_city, final_dest):
     cheapest_prices_table = {}
-    cheapest_previous_stopover_city_table = {}
     
     visited_cities = set()
     priority_queue = []
     
     cheapest_prices_table[start_city.name] = 0
     heapq.heappush(priority_queue, (0, start_city))
-    # (v + e) log v < v^2
+    # (v + e) log v < v^2 (queue)
     while priority_queue:
         cur_price, cur_city = heapq.heappop(priority_queue) # vlogv
         if cur_city.name in visited_cities:
@@ -49,23 +49,8 @@ def find_shortest_path(start_city, final_dest):
             
             if adj_city.name not in cheapest_prices_table or price_through_current_city < cheapest_prices_table[adj_city.name]:
                 cheapest_prices_table[adj_city.name] = price_through_current_city
-                cheapest_previous_stopover_city_table[adj_city.name] = cur_city.name
-                
                 heapq.heappush(priority_queue, (price_through_current_city, adj_city))
-    
-    shortest_path = []
-    cur_city = final_dest
-    
-    while cur_city.name != start_city.name:
-        shortest_path.append(cur_city.name)
-        cur_city.name = cheapest_previous_stopover_city_table[cur_city.name]
-    
-    shortest_path.append(start_city.name)
-    shortest_path.reverse()
-    
     print("cheapest_prices_table:", cheapest_prices_table)
-    print("cheapest_previous_stopover_city_table:", cheapest_previous_stopover_city_table)
-    print("shortest_path:", shortest_path)
 
 import doctest
 doctest.testmod(verbose=True)

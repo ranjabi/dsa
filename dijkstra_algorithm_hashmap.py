@@ -31,7 +31,7 @@ def find_shortest_path(start_city, final_dest):
     cheapest_prices_table = {}
     cheapest_previous_stopover_city_table = {}
     
-    unvisited_cities = [] # sort of queue
+    unvisited_cities = [] # queue
     visited_cities = set()
     
     cheapest_prices_table[start_city.name] = 0
