@@ -31,14 +31,14 @@ addPath(5, 2, 5)
 
 import heapq
 
-def prim(adj):
+def prim(adj): # (v+e)logv ~ elogv *in dense graph -> e ~ v^2
     pq = []
     heapq.heappush(pq, (0, 0))
     visited = set()
     cost = 0
     
     while pq:
-        uWeight, u = heapq.heappop(pq)
+        uWeight, u = heapq.heappop(pq) # vlogv
         
         if u in visited:
             continue
@@ -46,7 +46,7 @@ def prim(adj):
         visited.add(u)
         cost += uWeight
         
-        for vWeight, v in adj[u]:
+        for vWeight, v in adj[u]: # elogv *this will dominate
             heapq.heappush(pq, (vWeight, v))
     
     print(f'Total weight: {cost}')
