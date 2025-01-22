@@ -37,14 +37,14 @@ def find_shortest_path(start_city, final_dest):
     
     cheapest_prices_table[start_city.name] = 0
     heapq.heappush(priority_queue, (0, start_city))
-    # (v + e) log v < v^2 (queue)
+    # (v + e) log v ~ e log v < v^2 (queue)
     while priority_queue:
         cur_price, cur_city = heapq.heappop(priority_queue) # vlogv
         if cur_city.name in visited_cities:
             continue
         visited_cities.add(cur_city.name)
         
-        for adj_city, price in cur_city.routes.items(): # elogv
+        for adj_city, price in cur_city.routes.items(): # elogv *this will dominate
             price_through_current_city = cur_price + price
             
             if adj_city.name not in cheapest_prices_table or price_through_current_city < cheapest_prices_table[adj_city.name]:
